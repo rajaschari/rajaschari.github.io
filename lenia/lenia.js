@@ -61,11 +61,13 @@ let A = Array.from(new Array(size_y), _ => Array(size_x).fill(0));
 
 const C_vertflip = C.map(row => row.slice().reverse());
 const C_horflip = C.slice().reverse();
+const C_horvert = C_vertflip.slice().reverse();
 
 for (let i = 0; i < C.length; i++) {
   for (let j = 0; j < C[0].length; j++) {
     A[cx + i][cy + j] = C[i][j];
-    A[3*cx + i][3*cy + j] = C_horflip[i][j];
+    A[50 + i][50 + j] = C_horflip[i][j];
+    A[100 + i][100 + j] = C_vertflip[i][j];
   }
 }
 
@@ -119,7 +121,7 @@ function drawGrid(squareArray){
 
 // Evolution
 // const nj = require('numjs');
-const steps = 500;
+const steps = 50000;
 const m = 0.15;
 const s = 0.015;
 const T = 10;
