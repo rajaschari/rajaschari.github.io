@@ -1,13 +1,16 @@
 import { FFTUtils } from "./fft_code/FFTUtils.js";
 
 const canvas = document.getElementById('gridCanvas');
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
 const context = canvas.getContext('2d');
+
+context.clearRect(0, 0, canvas.width, canvas.height);
 
 // Create a color scale (adjust the color scheme as needed)
 const colorScale = d3.scaleSequential(d3.interpolateInferno)
 .domain([0, 1]);
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
 
 const size_x = 256;
 // const size_y = math.floor((canvas.height/canvas.width)*size_x);
@@ -173,17 +176,6 @@ function clip2DArray(arr) {
     }
   
     return clippedArray;
-}
-
-function return2Darray(array, n_row, n_col){
-  let output_array = Array.from(new Array(n_row), _ => Array(n_col).fill(0));
-
-  for (let i = 0; i < n_row; i++) {
-    for (let j = 0; j < n_col; j++) {
-      output_array[i][j] = array[i*n_col+j];
-    }
-  }
-  return output_array;
 }
 
 function simulate(step) {
