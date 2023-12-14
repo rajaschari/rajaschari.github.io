@@ -65,9 +65,10 @@ const C_horvert = C_vertflip.slice().reverse();
 
 for (let i = 0; i < C.length; i++) {
   for (let j = 0; j < C[0].length; j++) {
-    A[cx + i][cy + j] = C[i][j];
-    A[50 + i][50 + j] = C_horflip[i][j];
-    A[100 + i][100 + j] = C_vertflip[i][j];
+    A[mod(cx + i, A.length)][mod(cy + j, A[0].length)] = C[i][j];
+    A[mod(cx + i + 35, A.length)][mod(cy + j, A[0].length)] = C_horflip[i][j];
+    A[mod(cx + i, A.length)][mod(cy + j + 35, A[0].length)] = C_vertflip[i][j];
+    A[mod(cx + i + 35, A.length)][mod(cy+j+35, A[0].length)] = C_horvert[i][j];
   }
 }
 
