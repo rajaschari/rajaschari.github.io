@@ -63,14 +63,84 @@ const C_vertflip = C.map(row => row.slice().reverse());
 const C_horflip = C.slice().reverse();
 const C_horvert = C_vertflip.slice().reverse();
 
-for (let i = 0; i < C.length; i++) {
-  for (let j = 0; j < C[0].length; j++) {
-    A[mod(cx + i, A.length)][mod(cy + j, A[0].length)] = C[i][j];
-    A[mod(cx + i + 35, A.length)][mod(cy + j, A[0].length)] = C_horflip[i][j];
-    A[mod(cx + i, A.length)][mod(cy + j + 35, A[0].length)] = C_vertflip[i][j];
-    A[mod(cx + i + 35, A.length)][mod(cy+j+35, A[0].length)] = C_horvert[i][j];
+const cell_array = [C, C_horflip, C_vertflip, C_horvert];
+
+function generateRandomPoints(N_x, N_y, s, k) {
+  const points = [];
+
+  // Helper function to calculate wrapped distance
+  function wrappedDistance(a, b, size) {
+      const d = Math.abs(a - b);
+      return Math.min(d, size - d);
+  }
+
+  // Helper function to check if a point is at least s distance apart from existing points
+  function isValidPoint(x, y) {
+      for (const point of points) {
+          const distanceX = wrappedDistance(x, point.x, N_x);
+          const distanceY = wrappedDistance(y, point.y, N_y);
+
+          if (distanceX < s || distanceY < s) {
+              return false;
+          }
+      }
+      return true;
+  }
+
+  // Generate k random points
+  for (let i = 0; i < k; i++) {
+      let x, y;
+
+      // Keep generating points until a valid one is found
+      do {
+          x = Math.floor(Math.random() * N_x);
+          y = Math.floor(Math.random() * N_y);
+      } while (!isValidPoint(x, y));
+
+      points.push({ x, y });
+  }
+
+  return points;
+}
+
+const k = 8;
+const dist_s = C.length;
+const randomPoints = generateRandomPoints(A.length, A[0].length, dist_s, k);
+
+for (let ind = 0; ind < k; ind++) {
+  const randomIndex = Math.floor(Math.random() * 4);
+  let selectedArray;
+  switch (randomIndex) {
+    case 0:
+        selectedArray = C;
+        break;
+    case 1:
+        selectedArray = C_horflip;
+        break;
+    case 2:
+        selectedArray = C_vertflip;
+        break;
+    case 3:
+        selectedArray = C_horvert;
+        break;
+    default:
+        console.error('Invalid case');
+  }
+  for (let i = 0; i < C.length; i++) {
+    for (let j = 0; j < C[0].length; j++) {
+      // A[mod(cx + i, A.length)][mod(cy + j, A[0].length)] = C[i][j];
+      // A[mod(cx + i + 35, A.length)][mod(cy + j, A[0].length)] = C_horflip[i][j];
+      // A[mod(cx + i, A.length)][mod(cy + j + 35, A[0].length)] = C_vertflip[i][j];
+      // A[mod(cx + i + 35, A.length)][mod(cy+j+35, A[0].length)] = C_horvert[i][j];
+  
+    
+      A[mod((randomPoints[ind].x) + i, A.length)][mod((randomPoints[ind].y) + j, A[0].length)] = selectedArray[i][j];
+    }
   }
 }
+
+
+
 
 // Define convolution matrix K
 function bell(x, m, s) {
